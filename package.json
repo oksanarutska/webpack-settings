@@ -12,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jquery": "^3.5.1"
+    "jquery": "^3.5.1",
+    "swiper": "^5.3.8"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",

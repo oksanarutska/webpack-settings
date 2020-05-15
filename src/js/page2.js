@@ -1,9 +1,14 @@
 import {
     askName
 } from './utils/toast';
+import Swiper from 'swiper';
+import $ from 'jquery';
 
 askName();
 
-jQuery(function() {
-    jQuery("body").css("color", "blue");
-  });
+
+$(document).ready(function () {
+    var mySwiper = new Swiper('.page2-swiper-images', {
+        /* ... */
+    });
+})

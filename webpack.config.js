@@ -1,10 +1,16 @@
 const path = require("path");
+// File system - search and  read file from folder
 const fs = require("fs");
+// Plugins
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+
+// Plugin that simplifies creation of HTML files to serve your bundles -- https://www.npmjs.com/package/html-webpack-plugin
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+// Plugin for CSS - https://www.npmjs.com/package/mini-css-extract-plugin
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 
 function generateHtmlPlugins(templateDir) {
@@ -21,10 +27,10 @@ function generateHtmlPlugins(templateDir) {
   });
 }
 
-const htmlPlugins = generateHtmlPlugins("./src/html/views");
+const htmlPlugins = generateHtmlPlugins("./src/html/pages");
 
 const config = {
-  entry: ["./src/js/index.js", "./src/style/style.scss"],
+  entry: ["./src/js/index.js", "./src/assets/style/style.scss", "./src/assets/style/page1.scss"],
   output: {
     filename: "./js/bundle.js"
   },
@@ -42,7 +48,7 @@ const config = {
     rules: [
       {
         test: /\.(sass|scss)$/,
-        include: path.resolve(__dirname, "src/style"),
+        include: path.resolve(__dirname, "src/assets/style"),
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -84,7 +90,7 @@ const config = {
       },
       {
         test: /\.html$/,
-        include: path.resolve(__dirname, "src/html/includes"),
+        include: path.resolve(__dirname, "src/html/components"),
         use: ["raw-loader"]
       }
     ]
@@ -95,20 +101,16 @@ const config = {
     }),
     new CopyWebpackPlugin([
       {
-        from: "./src/fonts",
+        from: "./src/assets/fonts",
         to: "./fonts"
       },
       {
-        from: "./src/favicon",
+        from: "./src/assets/favicon",
         to: "./favicon"
       },
       {
-        from: "./src/img",
+        from: "./src/assets/img",
         to: "./img"
-      },
-      {
-        from: "./src/uploads",
-        to: "./uploads"
       }
     ])
   ].concat(htmlPlugins)
