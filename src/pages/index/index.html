@@ -13,7 +13,12 @@
 </head>
 
 <body>
+    <%= _.template(require('../../components/common/_header.html').default)() %>
     <h1>Index page</h1>
+    <% var footer = {
+        author: "Oksana"
+      }; %>
+        <%= _.template(require('../../components/common/_footer.html').default)(footer) %>
 </body>
 
 </html>

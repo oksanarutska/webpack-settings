@@ -1,4 +1,7 @@
-import { askName } from '../../js/helpers/toast';
+import { test } from '../../js/test';
+import $ from 'jquery';
 
 
-askName();
+$(function() {
+    $('body').css('color', 'blue');
+});
