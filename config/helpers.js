@@ -8,9 +8,6 @@ const stylesExtensions = ['scss', 'sass', 'css'];
 module.exports = {
     /**
      * Generates entries for webpack config. Note that [name].html associated js file will be [name].js and [name].scss/css
-     * @export
-     * @param {*} rootPath path to root
-     * @param {*} pagesDir directory where html pages are listed
      */
     generatateEntries: function (rootPath, pagesDir) {
         const pages = fs.readdirSync(path.resolve(rootPath, pagesDir));
@@ -50,9 +47,6 @@ module.exports = {
 
     /**
      * Generates HtmlWebPackPlugin for each html page in pagesDir
-     * @export
-     * @param {*} pagesDir path to folder where you have pages
-     * @returns array of HtmlWebpackPlugins for each page
      */
     generateHtmlPlugins: function (rootPath, pagesDir) {
         const pages = fs.readdirSync(path.resolve(rootPath, pagesDir));
