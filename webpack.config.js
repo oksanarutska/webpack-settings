@@ -88,6 +88,8 @@ const config = {
     ]
   },
   plugins: [
+    new CleanWebpackPlugin(),
+
     ...htmlPlugins,
 
     new MiniCssExtractPlugin({
@@ -110,9 +112,4 @@ const config = {
   ]
 };
 
-module.exports = (env, argv) => {
-  if (argv.mode === "production") {
-    config.plugins.push(new CleanWebpackPlugin());
-  }
-  return config;
-};
+module.exports = config;
