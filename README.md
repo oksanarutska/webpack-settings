@@ -1,6 +1,6 @@
 # webpack-settings
 
-## **_Запуск проекта :information_desk_p :_** 
+## :information_desk_p **_Запуск проекта:_** 
 
 1) Встановити [Node.js](https://nodejs.org/en/)
 2) Перейти в папку свого проекту чи створити нову папку.
