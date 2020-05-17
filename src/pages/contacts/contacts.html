@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link rel="shortcut icon"
+          href="favicon/favicon.ico" />
+
+    <title>Contact page</title>
+</head>
+
+<body>
+    <%= _.template(require('../../components/common/_header.html').default)() %>
+
+    <h1>Contact page</h1>
+
+    <% var footer = {
+    author: "Oksana"
+  }; %>
+    <%= _.template(require('../../components/common/_footer.html').default)(footer) %>
+</body>
+
+</html>

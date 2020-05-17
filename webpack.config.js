@@ -1,3 +1,6 @@
+const { pathNames } = require('./config/pathNames');
+const { generatateEntries, generateHtmlPlugins } = require('./config/helpers');
+
 const path = require("path");
 // File system - search and  read file from folder
 const fs = require("fs");
@@ -5,34 +8,23 @@ const fs = require("fs");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const autoprefixer = require('autoprefixer');
 
-// Plugin that simplifies creation of HTML files to serve your bundles -- https://www.npmjs.com/package/html-webpack-plugin
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+
 
 // Plugin for CSS - https://www.npmjs.com/package/mini-css-extract-plugin
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const htmlPlugins = generateHtmlPlugins(__dirname, pathNames.pages);
+const entries = generatateEntries(__dirname, pathNames.pages);
 
-function generateHtmlPlugins(templateDir) {
-  const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
-  return templateFiles.map(item => {
-    const parts = item.split(".");
-    const name = parts[0];
-    const extension = parts[1];
-    return new HtmlWebpackPlugin({
-      filename: `${name}.html`,
-      template: path.resolve(__dirname, `${templateDir}/${name}.${extension}`),
-      inject: false
-    });
-  });
-}
-
-const htmlPlugins = generateHtmlPlugins("./src/html/pages");
 
 const config = {
-  entry: ["./src/js/index.js", "./src/assets/style/style.scss", "./src/assets/style/page1.scss"],
+  entry: {
+    ...entries
+  },
   output: {
-    filename: "./js/bundle.js"
+    filename: `${pathNames.output.js}/[name].[hash].js`
   },
   devtool: "source-map",
   mode: "production",
@@ -47,8 +39,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.(sass|scss)$/,
-        include: path.resolve(__dirname, "src/assets/style"),
+        test: /\.(sass|scss|css)$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -67,6 +58,7 @@ const config = {
               ident: "postcss",
               sourceMap: true,
               plugins: () => [
+                autoprefixer(),
                 require("cssnano")({
                   preset: [
                     "default",
@@ -90,30 +82,32 @@ const config = {
       },
       {
         test: /\.html$/,
-        include: path.resolve(__dirname, "src/html/components"),
+        include: path.resolve(__dirname, pathNames.components),
         use: ["raw-loader"]
       }
     ]
   },
   plugins: [
+    ...htmlPlugins,
+
     new MiniCssExtractPlugin({
-      filename: "./css/style.bundle.css"
+      filename: `${pathNames.output.styles}/[name].[hash].css`
     }),
     new CopyWebpackPlugin([
       {
-        from: "./src/assets/fonts",
-        to: "./fonts"
+        from: pathNames.fonts,
+        to: pathNames.output.fonts
       },
       {
-        from: "./src/assets/favicon",
-        to: "./favicon"
+        from: pathNames.favicon,
+        to: pathNames.output.favicon
       },
       {
-        from: "./src/assets/img",
-        to: "./img"
+        from: pathNames.images,
+        to: pathNames.output.images
       }
     ])
-  ].concat(htmlPlugins)
+  ]
 };
 
 module.exports = (env, argv) => {
