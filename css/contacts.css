@@ -1,0 +1,12 @@
+body {
+  -webkit-transform: translateX(10px);
+          transform: translateX(10px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+/*# sourceMappingURL=contacts.css.map */
