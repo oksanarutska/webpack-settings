@@ -1,28 +1,37 @@
-const { pathNames } = require('./config/pathNames');
-const { generatateEntries, generateHtmlPlugins } = require('./config/helpers');
+const {
+  pathNames
+} = require('./config/pathNames');
+const {
+  generatateEntries,
+  generateHtmlPlugins
+} = require('./config/helpers');
 
 const path = require("path");
 // File system - search and  read file from folder
 const fs = require("fs");
 // Plugins
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const {
+  CleanWebpackPlugin
+} = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const autoprefixer = require('autoprefixer');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
+const isSeparateResources = false;
 
 
 // Plugin for CSS - https://www.npmjs.com/package/mini-css-extract-plugin
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const htmlPlugins = generateHtmlPlugins(__dirname, pathNames.pages);
-const entries = generatateEntries(__dirname, pathNames.pages);
-
+const htmlPlugins = generateHtmlPlugins(__dirname, pathNames.pages, isSeparateResources);
+const entry = isSeparateResources ?
+  generatateEntries(__dirname, pathNames.pages) : {
+    main: ['./src/js/index.js', './src/assets/style/index.scss']
+  }
 
 const config = {
-  entry: {
-    ...entries
-  },
+  entry,
   output: {
     filename: `${pathNames.output.js}/[name].[hash].js`
   },
@@ -37,11 +46,9 @@ const config = {
     ]
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.(sass|scss|css)$/,
-        use: [
-          {
+        use: [{
             loader: MiniCssExtractPlugin.loader,
             options: {}
           },
@@ -95,8 +102,7 @@ const config = {
     new MiniCssExtractPlugin({
       filename: `${pathNames.output.styles}/[name].[hash].css`
     }),
-    new CopyWebpackPlugin([
-      {
+    new CopyWebpackPlugin([{
         from: pathNames.fonts,
         to: pathNames.output.fonts
       },
@@ -108,8 +114,14 @@ const config = {
         from: pathNames.images,
         to: pathNames.output.images
       }
-    ])
+    ]),
   ]
 };
 
-module.exports = config;
+module.exports = (env, argv) => {
+  if (argv.mode === 'production') {
+    config.plugins.push(new WorkboxPlugin.GenerateSW());
+  }
+
+  return config;
+};;

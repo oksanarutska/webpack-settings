@@ -48,7 +48,7 @@ module.exports = {
     /**
      * Generates HtmlWebPackPlugin for each html page in pagesDir
      */
-    generateHtmlPlugins: function (rootPath, pagesDir) {
+    generateHtmlPlugins: function (rootPath, pagesDir, isSeparateResources) {
         const pages = fs.readdirSync(path.resolve(rootPath, pagesDir));
 
 
@@ -63,7 +63,9 @@ module.exports = {
 
             return new HtmlWebpackPlugin({
                 filename: `${page}.html`,
-                chunks: [page],
+                chunks: isSeparateResources ?
+                    [page] :
+                    'all',
                 template: path.resolve(rootPath, `${pagesDir}/${page}/${page}.html`),
                 inject: true
             })
